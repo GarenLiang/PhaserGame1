@@ -56,6 +56,8 @@ var GameState = {
     this.currentAnimal = this.animals.next();
     this.currentAnimal.position.set(this.game.world.centerX, this.game.world.centerY)
     //left arrow
+    this.showText(this.currentAnimal);
+
     this.leftArrow = this.game.add.sprite(60, this.game.world.centerY, 'arrow');
     this.leftArrow.anchor.setTo(0.5);
     this.leftArrow.scale.x = -1;
@@ -89,6 +91,9 @@ var GameState = {
       return false;
     }
     this.isMoving = true;
+
+    this.animalText.visible = false;
+
     var newAnimal, endX;
     if(sprite.customParams.direction > 0) {
       newAnimal = this.animals.next();
@@ -104,6 +109,7 @@ var GameState = {
       newAnimalMovement.to({x: this.game.world.centerX}, 1000);
       newAnimalMovement.onComplete.add(function(){
         this.isMoving = false;
+        this.showText(newAnimal);
       },this);
       newAnimalMovement.start();
 
@@ -112,6 +118,19 @@ var GameState = {
       currentAnimalMovement.start();
 
       this.currentAnimal = newAnimal;
+    },
+    showText: function(animal) {
+      if(!this.animalText) {
+        var style = {
+          font: 'bold 30pt Arial',
+          fill: '#D0171B',
+          align: 'center'
+        }
+        this.animalText = this.game.add.text(this.game.width/2, this.game.height*0.85,'',style);
+        this.animalText.anchor.setTo(0.5);
+      }
+      this.animalText.setText(animal.customParams.text);
+      this.animalText.visible = true;
     }
   };
 
